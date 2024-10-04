@@ -1,17 +1,20 @@
 const express = require('express');
+var cors = require('cors')
 var bodyParser = require('body-parser')
 require('dotenv').config()
 const db = require('./db/database');
 
 const app = express();
-app.use(bodyParser.json());
 const port = process.env.PORT;
 
-app.get('/api/v1/jobs', async (req,res) => {
+app.use(cors());
+app.use(bodyParser.json());
+
+app.get('/api/v1/jobs/:name/:location', async (req,res) => {
   try {
     const result = await db.query(
     'SELECT * FROM jobs JOIN companies ON jobs.company_id = companies.id WHERE jobs.job_name=$1 AND jobs.location=$2;', 
-    [req.body.name, req.body.location]);
+    [req.params.name, req.params.location]);
     res.status(200).json({
       status: "Success",
       data: {
