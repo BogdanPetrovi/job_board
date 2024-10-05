@@ -1,0 +1,13 @@
+.info {
+  width: 30%;
+  margin-right: 5%;
+  cursor: pointer;
+}
+
+.full-job {
+  width: 65%;
+}
+
+.header {
+  box-shadow: 1px 7px 10px -4px rgba(0,0,0,0.75);
+}

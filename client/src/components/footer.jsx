@@ -5,7 +5,7 @@ function Footer() {
   const year = d.getFullYear();
 
   return (
-    <div className="border-top p-3">
+    <footer className="border-top p-3">
       <div className="container d-flex justify-content-between">
         <h5>Copyright@{year}</h5>
         <div>
@@ -14,7 +14,7 @@ function Footer() {
           <a href='https://github.com/BogdanPetrovi/' rel="noreferrer" target='_blank' className='px-2' >GitHub</a>
         </div>
       </div>
-    </div>
+    </footer>
   )
 }
 

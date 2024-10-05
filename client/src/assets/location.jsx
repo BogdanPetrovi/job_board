@@ -1,8 +1,8 @@
 import * as React from "react";
 const Location = (props) => (
   <svg
-    width="2rem"
-    height="2rem"
+    width={props.width}
+    height={props.height}
     viewBox="0 0 16 16"
     xmlns="http://www.w3.org/2000/svg"
     fill="#000000"

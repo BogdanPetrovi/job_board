@@ -19,3 +19,13 @@ h4 > span {
   color: #0d6efd;
   cursor: pointer;
 }
+
+.main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main > footer {
+  margin-top:auto;
+}
