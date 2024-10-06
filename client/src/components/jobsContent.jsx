@@ -16,11 +16,21 @@ function JobsContent() {
     try {
       const result = await findJobs.get(`/get/apply/${id}`)
       setSelectedJobApplies(result.data.data.applies);
-      console.log(result);
+
     } catch (err) {
       console.log(err);
     }
   }
+
+  function formatDate(applyDate) {
+    const date = new Date(applyDate);
+    return date.toLocaleDateString("sr-RS", {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  }
+
   useEffect(() => {
     if(jobs.length > 0){
       setSelectedJob(jobs[0]);
@@ -58,8 +68,8 @@ function JobsContent() {
             <h2>Job details</h2>
             <div>
               <h5><Money /> Pay: {selectedJob.min_salary && selectedJob.min_salary === selectedJob.max_salary ?
-                selectedJob.min_salary :
-                selectedJob.min_salary + "-" + selectedJob.max_salary
+                "$" + selectedJob.min_salary :
+                "$" + selectedJob.min_salary + " - " + "$" + selectedJob.max_salary
               }</h5>
               <h5><Clock /> Type: {selectedJob.type} </h5>
             </div>
@@ -74,13 +84,22 @@ function JobsContent() {
           </div>
           <div className="applies pt-3 pb-1 px-4 border-bottom">
             <h2>Applies</h2>
-            {selectedJobApplies.map((apply, index) => (
-              <div key={index}>
-                <p className='lead' >{apply.name}</p>
-                <p className='lead' >{apply.date}</p>
-              </div>
-              
-            ))}
+            <table className="table mt-3">
+              <thead>
+                <tr>
+                  <th className="col">Name</th>
+                  <th className="col">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {selectedJobApplies.map((apply) => (
+                  <tr key={apply.id}>
+                    <th scope='row'>{apply.name}</th>
+                    <td>{formatDate(apply.date)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>  
