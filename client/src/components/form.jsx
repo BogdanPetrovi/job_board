@@ -23,7 +23,7 @@ function Form(props) {
         </div>
       </form>
       <div className="mx-auto p-2" style={{width:"fit-content"}} hidden={props.hidden}>
-        <h4>Want to post <span>Job</span>?</h4>
+        <h4>Want to post <a href="/new/job"><span>Job</span></a>?</h4>
       </div>
     </div>
     

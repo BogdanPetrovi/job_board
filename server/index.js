@@ -3,10 +3,13 @@ var cors = require('cors')
 var bodyParser = require('body-parser')
 require('dotenv').config()
 const db = require('./db/database');
+var morgan = require('morgan')
+
 
 const app = express();
 const port = process.env.PORT;
 
+app.use(morgan('dev'));
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -70,7 +73,7 @@ app.post('/api/v1/jobs/apply', async (req,res) => {
 
 app.get('/api/v1/people/companies', async (req,res) => {
   try {
-    const result = await db.query('SELECT name FROM companies');
+    const result = await db.query('SELECT id, name FROM companies');
     res.status(200).json({
       status:"success",
       data: result.rows
@@ -83,14 +86,19 @@ app.get('/api/v1/people/companies', async (req,res) => {
 
 app.post('/api/v1/people/add/company', async (req,res) => {
   try {
-    const result = await db.query(
-      'INSERT INTO companies(industry, description, name) VALUES($1, $2, $3) RETURNING *',
-      [req.body.industry, req.body.description, req.body.name]
-    )
-    res.status(201).json({
-      status: "success",
-      data: result.rows
-    })
+    if(req.body.industry !== '' && req.body.description !== '' && req.body.name !== ''){
+      const result = await db.query(
+        'INSERT INTO companies(industry, description, name) VALUES($1, $2, $3) RETURNING *',
+        [req.body.industry, req.body.description, req.body.name]
+      )
+      res.status(201).json({
+        status: "success",
+        data: result.rows
+      })
+    } else {
+      res.status(400).send("those columns are required")
+    }
+    
   } catch (err) {
     res.status(500).send(err)
   }

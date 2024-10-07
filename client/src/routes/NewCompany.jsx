@@ -1,18 +1,16 @@
 import React from 'react'
-import Form from '../components/form'
 import Header from '../components/header'
 import Footer from '../components/footer'
+import NewCompanyForm from '../components/newcompanyform'
 
-function Home() {
+function NewCompany() {
   return (
-    <div className='home'>
+    <div className='main'>
       <Header />
-      <Form />
-      <div></div>
-      <div></div>
+      <NewCompanyForm />
       <Footer />
     </div>
   )
 }
 
-export default Home
+export default NewCompany
