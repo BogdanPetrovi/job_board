@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
-import CompanyNameInput from './companyNameInput';
-import CompanyTextInput from './companyTextInput';
-import CompanyTextArea from './companyTextArea';
-import CompanyDropdown from './companyDropdown';
+import React, { useEffect, useState } from 'react'
+import CompanyNameInput from './company/companyNameInput';
+import CompanyTextInput from './company/companyTextInput';
+import CompanyTextArea from './company/companyTextArea';
+import CompanyDropdown from './company/companyDropdown';
+import CompanyRadio from './company/companyRadio';
+import CompanySalary from './company/companySalary';
 
 function NewJobStartContent() {
   const [companyId, setCompanyId] = useState(null);
@@ -10,6 +12,31 @@ function NewJobStartContent() {
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
   const [avaliablePlaces, setAvaliablePlaces] = useState('Select an option');
+  const [type, setType] = useState(null);
+  const [minSalary, setMinSalary] = useState(0);
+  const [maxSalary, setMaxSalary] = useState(0);
+  const [isExact, setIsExact] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  useEffect(() => {
+    function checkValidity() {
+      if(companyId !== null &&
+         jobName !== '' &&
+         location !== '' &&
+         description !== '' &&
+         avaliablePlaces !== 'Select an option' &&
+         type !== null &&
+         minSalary !== '' && minSalary !== 0 && 
+         maxSalary !== ''
+      ){
+        setIsDisabled(false);
+      } else {
+        setIsDisabled(true);
+      }
+    }
+
+    checkValidity();
+  },[companyId, jobName, location, description, avaliablePlaces, type, minSalary, maxSalary])
 
   function getCompany(id) {
     setCompanyId(id);
@@ -24,12 +51,22 @@ function NewJobStartContent() {
       setDescription(value);
     } else if(name ==='avaliableSpaces') {
       setAvaliablePlaces(value);
+    } else if(name ==='type') {
+      setType(value);
+    } else if(name === 'minSalary'){
+      setMinSalary(value);
+    } else if(name === 'maxSalary') {
+      setMaxSalary(value);
     }
+  }
+
+  function handleSubmit() {
+
   }
 
   return (
     <div>
-      <form className='container d-flex flex-column form-width w-50' >
+      <form className='container d-flex flex-column form-width w-50' onSubmit={handleSubmit} >
         <CompanyNameInput getCompany={id => getCompany(id) }/>
         <CompanyTextInput 
           rowName="name" 
@@ -52,14 +89,20 @@ function NewJobStartContent() {
           value={avaliablePlaces}
           getChange={value => handleChange(value, 'avaliableSpaces')}
         />
+        <CompanyRadio
+          getChange={value => handleChange(value, 'type')}
+        />
+        <CompanySalary
+          minSalary={minSalary}
+          maxSalary={maxSalary}
+          isExact={(val) => setIsExact(val)}
+          getChange={(value, name) => handleChange(value, name)}
+        />
+        <input type="submit" className='btn btn-primary mt-4' style={{width:"8rem", alignSelf:"center"}} disabled={isDisabled} />
+        {isDisabled ? <div className="form-text mt-0 mb-4" style={{alignSelf:"center"}}>You need to fill all rows</div> : null}
       </form>
     </div>
   )
 }
-
-
-//TO DO'S: 1.ADD JOB TYPE AND SALARY
-//         2.CHANGE TABLE SO AVALIABLE SPACE IS NOT NUMBER BUT TEXT
-//         3.MAKE SUBFOLDER IN COMPONENTS AND PUT ALL COMPONENTS WHICH WERE USED IN THIS FILE
 
 export default NewJobStartContent

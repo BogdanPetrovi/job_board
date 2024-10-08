@@ -4,7 +4,7 @@ import CompanyDropdownItem from './companyDropdownItem'
 function CompanyDropdown(props) {
   return (
     <div>
-      <label htmlFor="dropwdown" className='mt-4'>Number of people to hire for this job</label>
+      <label htmlFor="dropwdown" className='mt-4 mb-2'>Number of people to hire for this job</label>
       <div className="dropdown" id="dropdown">
       <button className="btn btn-light dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
         {props.value}

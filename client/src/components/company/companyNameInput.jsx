@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import findPeople from '../apis/findPeople';
+import findPeople from '../../apis/findPeople';
 
 
 function CompanyNameInput(props) {
