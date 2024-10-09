@@ -6,7 +6,6 @@ function CompanySalary(props) {
 
   function handleClick(val) {
     setIsExact(val);
-    props.isExact(val);
   }
 
   return (
@@ -14,7 +13,7 @@ function CompanySalary(props) {
       <label htmlFor="salary" className='mt-4 mb-2'>Job salary</label>
       <div className='btn-group' id='salary'>
         <input type="radio" className="btn-check" name="option-base" id="exact" autoComplete="off" defaultChecked />
-        <label className="btn" htmlFor="exact" onClick={() => handleClick(true)}>Exact salary</label>
+        <label className="btn" htmlFor="exact" onClick={() => {handleClick(true); props.getChange(0, 'maxSalary')} }>Exact salary</label>
 
         <input type="radio" className="btn-check" name="option-base" id="vary" autoComplete="off" />
         <label className="btn" htmlFor="vary" onClick={() => handleClick(false)}>Salary may vary</label>

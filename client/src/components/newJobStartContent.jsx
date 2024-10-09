@@ -5,6 +5,8 @@ import CompanyTextArea from './company/companyTextArea';
 import CompanyDropdown from './company/companyDropdown';
 import CompanyRadio from './company/companyRadio';
 import CompanySalary from './company/companySalary';
+import findPeople from '../apis/findPeople';
+import { useNavigate } from 'react-router-dom'
 
 function NewJobStartContent() {
   const [companyId, setCompanyId] = useState(null);
@@ -15,8 +17,8 @@ function NewJobStartContent() {
   const [type, setType] = useState(null);
   const [minSalary, setMinSalary] = useState(0);
   const [maxSalary, setMaxSalary] = useState(0);
-  const [isExact, setIsExact] = useState(true);
   const [isDisabled, setIsDisabled] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     function checkValidity() {
@@ -51,22 +53,39 @@ function NewJobStartContent() {
       setDescription(value);
     } else if(name ==='avaliableSpaces') {
       setAvaliablePlaces(value);
+      console.log(value);
     } else if(name ==='type') {
       setType(value);
     } else if(name === 'minSalary'){
       setMinSalary(value);
     } else if(name === 'maxSalary') {
       setMaxSalary(value);
+      console.log(value);
     }
   }
 
-  function handleSubmit() {
-
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      await findPeople.post('/add/job', {
+        companyid: companyId,
+        name: jobName,
+        description,
+        location,
+        avaliableSpaces: avaliablePlaces,
+        type,
+        minSal: minSalary,
+        maxSal: maxSalary
+      });
+      navigate(`/search/${jobName}/${location}`);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
     <div>
-      <form className='container d-flex flex-column form-width w-50' onSubmit={handleSubmit} >
+      <form className='container d-flex flex-column form-width w-50' onSubmit={(e) => handleSubmit(e)} >
         <CompanyNameInput getCompany={id => getCompany(id) }/>
         <CompanyTextInput 
           rowName="name" 
@@ -95,11 +114,11 @@ function NewJobStartContent() {
         <CompanySalary
           minSalary={minSalary}
           maxSalary={maxSalary}
-          isExact={(val) => setIsExact(val)}
           getChange={(value, name) => handleChange(value, name)}
         />
-        <input type="submit" className='btn btn-primary mt-4' style={{width:"8rem", alignSelf:"center"}} disabled={isDisabled} />
-        {isDisabled ? <div className="form-text mt-0 mb-4" style={{alignSelf:"center"}}>You need to fill all rows</div> : null}
+        <input type="submit" className='btn btn-primary mt-4' style={{width:"13rem", alignSelf:"center"}} disabled={isDisabled} />
+        {isDisabled ? <div className="form-text mt-0" style={{alignSelf:"center"}}>You need to fill all rows</div> : null}
+        <div className='mb-4'></div>
       </form>
     </div>
   )

@@ -96,7 +96,7 @@ app.post('/api/v1/people/add/company', async (req,res) => {
         data: result.rows
       })
     } else {
-      res.status(400).send("those columns are required")
+      res.status(400).send("All rows are required")
     }
     
   } catch (err) {
@@ -106,6 +106,7 @@ app.post('/api/v1/people/add/company', async (req,res) => {
 
 app.post('/api/v1/people/add/job', async (req, res) => {
   try {
+  if(req.body.name !== '' && req.body.description !== '' && req.body.location !== '' && req.body.avaliableSpaces !== 'Select an option' && req.body.minSal !== '' && req.body.maxSal !== ''){
     const result = await db.query(
       'INSERT INTO jobs(company_id, job_name, job_description, location, avaliable_spaces, type, min_salary, max_salary) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
       [req.body.companyid, req.body.name, req.body.description, req.body.location, req.body.avaliableSpaces, req.body.type, req.body.minSal, req.body.maxSal]
@@ -114,6 +115,9 @@ app.post('/api/v1/people/add/job', async (req, res) => {
       status:"success",
       data:result.rows
     })
+  } else {
+    res.status(400).send('All rows are required')
+  }
   } catch (err) {
     res.status(500).send(err)
     console.log(err)

@@ -31,11 +31,11 @@ function CompanyNameInput(props) {
   return (
     <>
       {exist ?
-      <><label htmlFor="name" className='form-label text-success'>Company name</label>
-      <input type="text" id='name' className='form-control border border-success' value={company} onChange={handleChange} required /></>        
+      <><label htmlFor="name" className='form-label text-success mt-4'>Company name</label>
+      <input type="text" id='name' className='form-control border border-success' value={company} onChange={handleChange} required autoComplete='off' /></>        
       :
-      <><label htmlFor="name" className='form-label text-danger'>Company name</label>
-      <input type="text" id='name' className='form-control border border-danger' value={company} onChange={handleChange} required />
+      <><label htmlFor="name" className='form-label text-danger mt-4'>Company name</label>
+      <input type="text" id='name' className='form-control border border-danger' value={company} onChange={handleChange} required autoComplete='off' />
       <div className="form-text mt-0">This company doesn't exist in out database.</div></>
     }
     </>
