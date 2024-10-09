@@ -14,18 +14,44 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.get('/api/v1/jobs/:name/:location', async (req,res) => {
-  const location = req.params.location.toLowerCase() + '%';
-  const name = '%' + req.params.name.toLowerCase() + '%';
-  try {
-    const result = await db.query(
-      'SELECT * FROM companies JOIN jobs ON jobs.company_id = companies.id WHERE LOWER(jobs.job_name) LIKE $1 AND LOWER(jobs.location) LIKE $2;',
-      [name, location]);
+  function send(jobs){
     res.status(200).json({
       status: "Success",
       data: {
-        jobs: result.rows,
+        jobs,
       }
     })
+  }
+  const location = req.params.location.toLowerCase() + '%';
+  const name = '%' + req.params.name.toLowerCase() + '%';
+  try {
+    if(req.params.name === 'all'){
+      if(req.params.location === 'all'){
+        const result = await db.query(
+          'SELECT * FROM companies JOIN jobs ON jobs.company_id = companies.id ORDER BY jobs.id DESC;'
+        )
+        send(result.rows);
+      } else {
+        const result = await db.query(
+          'SELECT * FROM companies JOIN jobs ON jobs.company_id = companies.id WHERE LOWER(jobs.location) LIKE $1 ORDER BY jobs.id DESC;',
+          [location]
+        )
+        send(result.rows)
+      }
+    } else if(req.params.location === 'all') {
+      const result = await db.query(
+        'SELECT * FROM companies JOIN jobs ON jobs.company_id = companies.id WHERE LOWER(jobs.job_name) LIKE $1 ORDER BY jobs.id DESC;',
+        [name]
+      )
+      send(result.rows)
+    } else {
+      const result = await db.query(
+        'SELECT * FROM companies JOIN jobs ON jobs.company_id = companies.id WHERE LOWER(jobs.job_name) LIKE $1 AND LOWER(jobs.location) LIKE $2 ORDER BY jobs.id DESC;',
+        [name, location]);
+      send(result.rows);
+    }
+    
+    
   } catch (err) {
     console.log(err);
   }

@@ -6,6 +6,7 @@
 
 .full-job {
   width: 65%;
+  height: fit-content;
 }
 
 .header {
