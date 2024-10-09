@@ -67,7 +67,7 @@ function JobsContent() {
           <div className="details pt-3 pb-1 px-4 border-bottom">
             <h2>Job details</h2>
             <div>
-              <h5><Money /> Pay: {selectedJob.min_salary && selectedJob.min_salary === selectedJob.max_salary ?
+              <h5><Money /> Pay: {selectedJob.min_salary && selectedJob.min_salary > selectedJob.max_salary ?
                 "$" + selectedJob.min_salary :
                 "$" + selectedJob.min_salary + " - $" + selectedJob.max_salary
               }</h5>
